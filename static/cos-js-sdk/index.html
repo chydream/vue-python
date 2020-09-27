@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./dist/cos-js-sdk-v5.min.js"></script>
+</head>
+<body>
+<input id="file-selector" type="file" accept=".mp4">
+<img src="" id="indexImg"/>
+<script type="text/javascript">
+    var cos = new COS({
+        SecretId: '',
+        SecretKey: '',
+    });
+    var Bucket = 'platform-live-center-test-1258963190';
+    var Region = 'ap-guangzhou';
+    // var Bucket = 'yiyu-1300304002';
+    // var Region = 'ap-chengdu';
+    // cos.getBucket({
+    //     Bucket:Bucket,
+    //     Region:Region,
+    //     Prefix: 'train/',
+    // },function (err,data) {
+    //     console.log(err || data.Contents);
+    // })
+    // cos.putObject({
+    //   Bucket:Bucket,
+    //     Region:Region,
+    //     Key: 'picture.jpg',
+    //     StorageClass: 'dtandard',
+    //     Body: file,
+    //     onProgress: function(progressData){
+    //       console.log(JSON.stringify(progressData));
+    //     }
+    // }, function(err,data){
+    //   console.log(err || data);
+    // })
+    document.getElementById('file-selector').onchange = function () {
+      var file = this.files[0];
+      console.log(file)
+      if (!file) return;
+      // console.log(file)
+      // cos.sliceUploadFile({
+      //   Bucket: Bucket, /* 必须 */
+      //   Region: Region,    /* 必须 */
+      //   Key: '1.mp4',              /* 必须 */
+      //   Body: file,                /* 必须 */
+      //   onTaskReady: function(taskId) {                   /* 非必须 */
+      //     // console.log(taskId);
+      //   },
+      //   onHashProgress: function (progressData) {       /* 非必须 */
+      //     // console.log(JSON.stringify(progressData));
+      //   },
+      //   onProgress: function (progressData) {           /* 非必须 */
+      //     // console.log(JSON.stringify(progressData));
+      //   }
+      // }, function(err, data) {
+      //   console.log(err || data.Location);
+      // })  
+
+      cos.putObject({
+          Bucket: Bucket,
+          Region: Region,
+          Key: 'train/' + file.name,
+          Body: file,
+      }, function (err, data) {
+          console.log(err || data);
+      });
+    };
+    
+    // var url = cos.getObjectUrl({
+    //   Bucket: Bucket,
+    //   Region: Region,
+    //   Key: 'train/yqjz.png',
+    //   Sign: true
+    // }, function (err, data) {
+    //   // if (!err) return console.log(err);
+    //   // var downloadUrl = data.Url + (data.Url.indexOf('?') > -1 ? '&' : '?') + 'response-content-disposition=attachment'; // 补充强制下载的参数
+    //   // window.open(downloadUrl); // 这里是新窗口打开 url，如果需要在当前窗口打开，可以使用隐藏的 iframe 下载，或使用 a 标签 download 属性协助下载
+    // });
+    // console.log(url)
+    // cos.multipartUpload({
+    //     Bucket: Bucket, /* 必须 */
+    //     Region:Region,    /* 必须 */
+    //     Key: 'picture.jpg',       /* 必须 */
+    //     ContentLength: '1024',
+    //     UploadId: '1521389146c60e7e198202e4e6670c5c78ea5d1c60ad62f1862f47294ec0fb8c6b7f3528a2',
+    //     PartNumber: '1',
+    //     Body: file
+    // }, function(err, data) {
+    //     console.log(err || data);
+    // });
+</script>
+</body>
+</html>

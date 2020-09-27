@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="jquery.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+        function sliceFiles(file, num) {
+            var fileList = [];
+            var singleSize = Math.ceil(file.size / num);
+            var location = 0;
+            while (location < file.size) {
+                fileList.push(file.slice(location, location + singleSize));
+                location += singleSize
+            }
+            return fileList
+        }
+
+        function uploadFileSingle(index, file) {
+            return new Promise(function (resolve, reject) {
+                var formData = new FormData();
+                formData.append("file", file)
+                formData.append("index", index)
+                formData.append("chunk", 1)
+                formData.append("chunks", 1)
+                formData.append("guid", 1)
+                $.ajax({
+                    url: '/files-anon/bigFile',
+                    type: 'post',
+                    processData: false,
+                    contentType: false,
+                    mimeType: "multipart/form-data",
+                    headers: {
+                        'Authorization': ''
+                    },
+                    data: formData,
+                    success: function (data) {
+                        resolve.apply(data)
+                    },
+                    error: function (data) {
+                        reject.apply(data)
+                    }
+                })
+            })
+        }
+
+        function doSub() {
+            var target = $("#fileName");
+            var fileObj = target[0].files[0]
+            var files = sliceFiles(fileObj, 10)
+            console.log(files)
+            var promise = []
+            $.each(files, (index, item) => {
+                var indexInner = index;
+                var itemInner = item;
+                promise.push(uploadFileSingle(indexInner, itemInner));
+            })
+            Promise.all(promise).then(response => {
+              console.log(fileObj)
+              merge(fileObj.name)
+            })
+        }
+
+        function merge(fileName) {
+          var data = {
+            fileName: fileName,
+	          guid: 1
+          }
+          $.ajax({
+              url: '/files-anon/merge',
+              type: 'post',
+              dataType:'json',
+              headers: {
+                  'Authorization': '',
+                  'Content-Type': 'application/json; charset=utf-8' 
+              },
+              data: JSON.stringify(data),
+              success: function (data) {
+                  console.log(data)
+              },
+              error: function (data) {
+                console.log(data)
+              }
+          })
+        }
+        // merge(123)
+    </script>
+</head>
+<body>
+<form>
+    <input type="file" name="fileName" id="fileName">
+    <input type="button" value="提交" onclick="doSub()">
+</form>
+</body>
+</html>
