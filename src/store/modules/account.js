@@ -1,4 +1,4 @@
-import { login } from '@/api/userApi'
+import { login } from '@/api/accountApi'
 const account = {
   namespaced: true,
   mutations: {

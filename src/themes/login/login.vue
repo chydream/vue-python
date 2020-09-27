@@ -7,7 +7,7 @@
         <el-row>
           <el-col :span="24">
             <el-form-item prop="username">
-              <el-input v-model="ruleForm.username" placeholder="用户名"  prefix-icon="el-icon-user" @blur="getUsername"></el-input>
+              <el-input v-model="ruleForm.username" placeholder="用户名"  prefix-icon="el-icon-user"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="24">
@@ -127,7 +127,6 @@ export default {
   },
   mounted () {
     this.setCaptcha()
-    this.getTenantArr()
   },
   methods: {
     // 设置用户名
@@ -178,28 +177,28 @@ export default {
             // client_secret: 'webApp', 
           }
           // console.log(params)
-          this.$store.dispatch('user/Login', params).then(res => {
-            // console.log(res)
-            this.$store.dispatch('user/GetUserInfo', {access_token: res.accessToken}).then(res => {
-              this.loginLoading = false
-              // console.log(res)
-              if (this.checked) {
-                setCookie('username', params.username, 24)
-              } else {
-                setCookie('username', '', -1)
-              }
-              this.$router.push('/home/index')
-            }).catch(() => {
-              this.$store.dispatch('user/Logout').then(res => {
-                this.$router.push('/login')
-                this.$store.commit('common/CLEAR_TAG')
-              }).catch((err) => {
-                this.tip(err.resp_msg, 'error')
-              })
-              this.loginLoading = false
-              this.tip('服务器出错', 'error')
-              // console.log(err)
-            })
+          this.$store.dispatch('account/Login', params).then(res => {
+            console.log(res)
+            // this.$store.dispatch('user/GetUserInfo', {access_token: res.accessToken}).then(res => {
+            //   this.loginLoading = false
+            //   // console.log(res)
+            //   if (this.checked) {
+            //     setCookie('username', params.username, 24)
+            //   } else {
+            //     setCookie('username', '', -1)
+            //   }
+            //   this.$router.push('/home/index')
+            // }).catch(() => {
+            //   this.$store.dispatch('user/Logout').then(res => {
+            //     this.$router.push('/login')
+            //     this.$store.commit('common/CLEAR_TAG')
+            //   }).catch((err) => {
+            //     this.tip(err.resp_msg, 'error')
+            //   })
+            //   this.loginLoading = false
+            //   this.tip('服务器出错', 'error')
+            //   // console.log(err)
+            // })
           }).catch((err) => {
               this.loginLoading = false
               this.tip(err.resp_msg, 'error')
@@ -241,30 +240,6 @@ export default {
         }
       }
       return uuid.join('')
-    },
-    getTenantArr () {
-      var params = {
-        code: '',
-        name: ''
-      }
-      this.$store.dispatch('tenant/TenantSelect', params).then(res => {
-        // console.log(res)
-        this.tenantArr = res.data.filter((item, index, array) => {
-          return item.deleted === 0 && item.enabled
-        })
-      })
-    },
-    changeSelect (value) {
-      // console.log(value)
-    },
-    getUsername () {
-      if (this.ruleForm.username == 'yangoadmin') {
-        this.isAdmin = true
-        this.ruleForm.tenantId = '0'
-      } else {
-        this.isAdmin = false
-        this.ruleForm.tenantId = ''
-      }
     }
   }
 }

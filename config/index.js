@@ -10,73 +10,17 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      // '/': {
-      //   target: 'http://39.108.8.149:30001',
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //       '^/': '/'
-      //   }
-      // },
-      '/api-data/v1.0': {
-        target: 'http://192.168.3.186:9200/api-data/v1.0',
+      '/account': {
+        target: 'http://127.0.0.1:8900/account',
         changeOrigin: true,
         pathRewrite: {
-            '^/api-data/v1.0': '/'
+            '^/account': '/'
         }
-      },
-      '/api-user/v1.0': {
-        target: 'http://192.168.3.186:9200/api-user/v1.0',
-        changeOrigin: true,
-        pathRewrite: {
-            '^/api-user/v1.0': '/'
-        }
-      },
-      '/api-auth/v1.0': {
-        target: 'http://192.168.3.186:9200/api-auth/v1.0',
-        changeOrigin: true,
-        pathRewrite: {
-            '^/api-auth/v1.0': '/'
-        }
-      },
-      '/api-user': {
-        target: 'http://192.168.3.186:9200/api-user/',
-        changeOrigin: true,
-        pathRewrite: {
-            '^/api-user': '/'
-        }
-      },
-      '/users': {
-        target: 'http://192.168.3.142:7000/users/',
-        changeOrigin: true,
-        pathRewrite: {
-            '^/users': '/'
-        }
-      },
-      '/files': {
-        target: 'http://192.168.3.123:5000/files',
-        changeOrigin: true,
-        pathRewrite: {
-            '^/files': '/'
-        }
-      },
-      // '/tenants': {
-      //   target: 'http://192.168.3.142:7000/tenants/',
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //       '^/tenants': '/'
-      //   }
-      // },
-      // '/': {
-      //   target: 'http://39.108.8.149:9600/',
-      //   changeOrigin: true,
-      //   pathRewrite: {
-      //       '^/': '/'
-      //   }
-      // }
+      }
     },
 
     // Various Dev Server settings
-    host: '0.0.0.0', // can be overwritten by process.env.HOST
+    host: '127.0.0.1', // can be overwritten by process.env.HOST
     port: 8090, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
     autoOpenBrowser: true,
     errorOverlay: true,
